@@ -1,0 +1,11 @@
+{
+    "bindings": [
+        {
+            "schedule": "0 * */12 * * *",
+            "name": "NotionToSanity",
+            "type": "timerTrigger",
+            "direction": "in"
+        }
+    ],
+    "scriptFile": "../dist/src/index.js"
+}
