@@ -10,8 +10,9 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@notionhq/client": "^2.1.1",
-    "@sanity/client": "3.3.2"
+    "@notionhq/client": "1.0.4",
+    "@sanity/client": "3.3.2",
+    "notion-to-md": "2.5.3"
   },
   "devDependencies": {
     "@azure/functions": "^3.0.0",

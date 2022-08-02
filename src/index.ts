@@ -1,35 +1,30 @@
 import { AzureFunction, Context } from '@azure/functions';
-import { Client as NotionClient } from '@notionhq/client';
-import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
-import { SanityClient } from '@sanity/client';
-
-const notion = new NotionClient({ auth: process.env["Notion_Client_Key"]})
+import { Article } from './common/article';
+import { GetNotionItems, UpdateNotionLink } from './services/notion.service';
+import { UpdateSanity } from './services/sanity.service';
 
 const trigger: AzureFunction = async (context: Context) => {
-    console.log('context', context);
+    let response: Article[] | null = await GetNotionItems();
 
-    // Check Notion Database for any updates with a Status of "Scheduled" to pull into Sanity
-    let items[] = await getNotionItems();
-    
+    if (response === null) {
+        return;
+    }
 
-};
+    response.map(async (item) => {
+        item = await UpdateSanity(item);
 
-const getNotionItems = async () => {
-    let response: QueryDatabaseResponse = await notion.databases.query({
-        database_id: process.env["NOTION_DATABASE_ID"],
-        filter: {
-                property: 'Status',
-                select: {
-                    equals: 'Scheduled'
-                }
+        if (item.sanityId != null) {
+            var response = await UpdateNotionLink(item);
+
+            if (response) {
+                console.log(`Notion Page of ID: ${item.notionId} updated to sanity Id: ${item.sanityId}`);
             }
-    })
+        }
+    });
 
-    return response;
-}
-
-const updateSanity = async() => {
-    
-}
+    setTimeout(() => {
+        console.log('Holding on till Dylan can cancel execution!');
+    }, 55000);
+};
 
 export default trigger;

@@ -1,7 +1,7 @@
 {
     "bindings": [
         {
-            "schedule": "0 * */12 * * *",
+            "schedule": "*/2 * * * * *",
             "name": "NotionToSanity",
             "type": "timerTrigger",
             "direction": "in"
