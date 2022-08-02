@@ -21,10 +21,6 @@ const trigger: AzureFunction = async (context: Context) => {
             }
         }
     });
-
-    setTimeout(() => {
-        console.log('Holding on till Dylan can cancel execution!');
-    }, 55000);
 };
 
 export default trigger;
