@@ -2,6 +2,7 @@ import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints'
 import { Client } from '@notionhq/client';
 import { Article } from '../common/article';
 import { NotionToMarkdown } from 'notion-to-md';
+import { Context } from '@azure/functions';
 
 const client = new Client({
     auth: process.env['Notion_Client_Key'],
@@ -10,7 +11,7 @@ const client = new Client({
 
 const notionBodyClient = new NotionToMarkdown({ notionClient: client });
 
-const GetNotionItems = async (): Promise<Article[] | null> => {
+const GetNotionItems = async (context: Context): Promise<Article[] | null> => {
     let response: QueryDatabaseResponse = await client.databases.query({
         database_id: process.env['Notion_Database_Id'],
         filter: {
@@ -36,6 +37,8 @@ const GetNotionItems = async (): Promise<Article[] | null> => {
             ],
         },
     });
+
+    context.log(response);
 
     if (response?.results != null) {
         return await Promise.all(
