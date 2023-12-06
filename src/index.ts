@@ -4,14 +4,17 @@ import { GetNotionItems, UpdateNotionLink } from './services/notion.service';
 import { UpdateSanity } from './services/sanity.service';
 
 const trigger: AzureFunction = async (context: Context) => {
-    let response: Article[] | null = await GetNotionItems();
+    context.log('hello');
+    let response: Article[] | null = await GetNotionItems(context);
 
     if (response === null) {
         return;
     }
 
+    context.log(response);
+
     response.map(async (item) => {
-        item = await UpdateSanity(item);
+        item = await UpdateSanity(item, context);
 
         if (item.sanityId != null) {
             var response = await UpdateNotionLink(item);
